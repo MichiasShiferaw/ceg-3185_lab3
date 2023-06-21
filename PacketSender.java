@@ -18,7 +18,7 @@ public class PacketSender extends Thread{
         try{
             s = new Socket(addy, port);
 
-            System.out.println("Data to send: "+ data);
+            System.out.println("Data to be sent: "+ data);
 
             out = new DataOutputStream(s.getOutputStream());
             out.writeUTF(data);
@@ -106,12 +106,14 @@ public class PacketSender extends Thread{
 
         int cint = 0;
 
+        //perform addition to caclulate the total of all 16 bits
         for (int i=0; i<words.length;i++){
             cint+=  Integer.parseInt(words[i], 16);
         }
 
         String csum = Integer.toHexString(cint);
 
+        //remove the carry and add it to the remaining checksum value
         if (csum.length()!=4){
             String f = csum.substring(0,1);
             csum=csum.substring(1);
@@ -135,20 +137,19 @@ public class PacketSender extends Thread{
 
     private static String encodeFunc(String client, String server, String payL){
         
-        //provided fixed hardcoded info provided by the lab requirements 
-        String headerLength = "45";
-        String tOS = "00";
-        String flags ="4000";
-        String ttl ="4006";
-        String idField = "1c46" ;
 
+        String headerLength = "45"; //4 refers to IPv4 and 5 corresponds to the header length (fixed)
+        String tOS = "00"; //type of service (fixed)
+        String flags ="4000"; //corresponds to the fragment offset of IP header fields (fixed)
+        String ttl ="4006"; //40 corresponds to the TTL field, 06 corresponds to TCP, protocol field (fixed)
+        String idField = "1c46" ; //identification field (fixed)
 
-        // convert the payload, as well as client and server ip to hex 
-        String clientIP = convertIPToHex(client);
-        String serverIP = convertIPToHex(server);
-        String payload = convertStrToHex(payL);
+ 
+        String clientIP = convertIPToHex(client); //source IP address in the IP header in hex
+        String serverIP = convertIPToHex(server); //destination IP address in the IP header in hex
+        String payload = convertStrToHex(payL); //the payload in hex
 
-        String len = getLength(payL);
+        String len = getLength(payL); // record the payload's length
         String csum = calcChecks(headerLength+tOS+len+idField+flags+ttl+clientIP+serverIP);
 
         String data = headerLength+tOS+len+idField+flags+ttl+csum+clientIP+serverIP+addPad(payload);
@@ -158,8 +159,12 @@ public class PacketSender extends Thread{
     }
 
     public static void main(String[] args) throws IOException {
+
+        // Default ip's and payload inputs
         String ipDest ="192.168.0.1";
+        String ipSrs ="192.168.0.3";
         String payL = "COLOMBIA 2 - MESSI 0";
+
         if(args.length==0) {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("***********Welcome**************");
@@ -180,7 +185,7 @@ public class PacketSender extends Thread{
            
         }
 
-        String ipSrs ="192.168.0.3";
+        
 
         String data = encodeFunc(ipSrs, ipDest, payL);
 

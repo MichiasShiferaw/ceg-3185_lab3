@@ -25,20 +25,18 @@ public class PacketReceiver extends Thread {
             System.out.println("Server is up and running");
 
             s = ss.accept();
+
+            // Outputs once client socket is accepted
             System.out.println("***__Client Connected __***");
 
-
+            //Read from client using input stream
             in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
 
             String data = in.readUTF();
 
-            System.out.println("Datagram : "+ data);
             data = removePad(data);
 
-
-
-
-            System.out.println("Datagram without padding: " + data);
+            System.out.println("Datagram : "+ data);
 
             System.out.println("__________________");
 
@@ -57,73 +55,76 @@ public class PacketReceiver extends Thread {
         
     }
 
-    public static boolean ChecksumCalc(String header, String len, String idField, String flags, String tcp, String csum, String ipS, String ipD){
-
+    public static boolean calcChecksumFunc(String header, String len, String idField, String flags, String tcp, String csum, String ipS, String ipD){
+        
         String p1 = ipS.substring(0, 4);
         String p2 = ipS.substring(5);
-
+        
         String p3 = ipD.substring(0, 4);
         String p4 = ipD.substring(5);
 
-        int headerDecode = Integer.parseInt(header,16);
-        int lengthDecode = Integer.parseInt(len,16);
-        int idFieldDecode = Integer.parseInt(idField,16);
-        int flagsDecode = Integer.parseInt(flags,16);
-        int tcpDecode= Integer.parseInt(tcp,16);
+        //transform all the hexidecimals(base 16) to decimals (base 10)
+        int hDecode = Integer.parseInt(header,16);
+        int lDecode = Integer.parseInt(len,16);
+        int iFDecode = Integer.parseInt(idField,16);
+        int fDecode = Integer.parseInt(flags,16);
+        int tDecode= Integer.parseInt(tcp,16);
         int csumDecode =Integer.parseInt(csum,16);
         int p1Decode = Integer.parseInt(p1,16);
         int p2Decode =Integer.parseInt(p2,16);
         int p3Decode = Integer.parseInt(p3, 16);
         int p4Decode = Integer.parseInt(p4,16);
 
-        int sum = headerDecode+lengthDecode+idFieldDecode+flagsDecode+tcpDecode+csumDecode+p1Decode+p2Decode+p3Decode+p4Decode;
 
-        String sumHex = Integer.toHexString(sum);
+        int sum = hDecode+lDecode+iFDecode+fDecode+tDecode+csumDecode+p1Decode+p2Decode+p3Decode+p4Decode;//perform addition to retrieve sum of all bits
 
+        String hexSum = Integer.toHexString(sum); //example transforms to 2FFFFD
 
-        if (sumHex.length()>4){
-            String cry= sumHex.substring(0,1);
-            sumHex = sumHex.substring(1);
+        //remove the carry value and add it to the sum value
+        if (hexSum.length()>4){
+            String cry= hexSum.substring(0,1);
+            hexSum = hexSum.substring(1);
             int cryD = Integer.parseInt(cry,16);
-            int sumHexD = Integer.parseInt(sumHex,16);
-            sum=cryD+sumHexD;
-            sumHex=Integer.toHexString(sum);
+            int hexSumD = Integer.parseInt(hexSum,16);
+            sum=cryD+hexSumD;
+            hexSum=Integer.toHexString(sum);
         }
-
-        if (sumHex.equals("ffff")){
+        // if the value is FFFF then its one's complement is zero (no error)
+        if (hexSum.equals("ffff")){
             return true;
         }
+        //otherwise return false to throw error msg
         return false;
 
     }
 
+    //Transform hexidecimal component to return the param's ip address
     public static String getAddy(String addy){
+
         int one = Integer.parseInt(addy.substring(0,2),16);
         int sec =  Integer.parseInt(addy.substring(2,4),16);
         int three =  Integer.parseInt(addy.substring(5,7),16);
         int four =  Integer.parseInt(addy.substring(7),16);
-
         return (one+"."+sec+"."+three+"."+four);
-    
     
     }
 
-
+    //Iterate through the hex code of the message in pairs and parse it to a character
     public static String convertToText(String str){
         StringBuilder sb = new StringBuilder();
 
+        
         for (int i=0; i<str.length();i+=2){
             String c = str.substring(i, i+2);
             sb.append((char) Integer.parseInt(c,16));
         }
-
-
         return sb.toString();
     }
 
+
     public static void decodeFunc(String input){
 
-        String[] inputArr = input.split(" ");
+        String[] inputArr = input.split(" "); //example 4500 0028 1c46 4000 4006 9d35 c0a8 0003 c0a8 0001 434f 4c4f 4d42 4941 2032 202d 204d 4553 5349 2030
 
         String header = inputArr[0];
         String len = inputArr[1];
@@ -143,7 +144,7 @@ public class PacketReceiver extends Thread {
         }
 
 
-        boolean bool = ChecksumCalc(header, len, idField, flags, tcp, csum, ipS, ipD);
+        boolean bool = calcChecksumFunc(header, len, idField, flags, tcp, csum, ipS, ipD);
 
         if (!bool){
             System.out.println("The verification of the checksum demonstrates that the packet received is corrupted. Packet discarded!");
@@ -151,12 +152,16 @@ public class PacketReceiver extends Thread {
             String ipSource = getAddy(ipS);
 
 
-            int lenPacket = Integer.parseInt(len.substring(2,4),16);
+            int lenPacket = Integer.parseInt(len.substring(2,4),16); //28->00101000
 
-            int payL = Integer.parseInt(len.substring(0,2),16)+20;
+
+
+            int payL = Integer.parseInt(len.substring(0,2),16)+20; // add 20 bytes to represents the payload size (as indicated in the requirements) 
 
             String decMsg = convertToText(msg);
 
+
+            //Execute outputs as requested from lab requirements
             System.out.println("Receives the data stream and prints to the screen the data received with the following message:");
             System.out.println("The data received from "+ipSource+" is "+decMsg);
             System.out.println("The data has "+(8*payL)+" bites or "+payL+" bytes. Total length of the packet is "+lenPacket+" bytes.");
