@@ -30,16 +30,12 @@ to read and compile class file.
 ```bash
 java PacketSender 
 ```
-OR
-```bash
-java PacketSender {custom payload}
-```
 to execute the client side
 
 
 ## Demo
 
-
+![Screenshot](https://github.com/MichiasShiferaw/ceg-3185_lab3/blob/main/Output/LabOutput.png)
 
 
 ## Authors
