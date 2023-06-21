@@ -1,4 +1,5 @@
 import java.net.*;
+import java.util.Random;
 import java.io.*;
     /**
      * @class CEG 3185 Lab 3
@@ -135,6 +136,30 @@ public class PacketSender extends Thread{
         return str;
     }
 
+
+    private static String setIdField(){
+
+        Random r = new Random();
+        String id_field = Integer.toHexString(r.nextInt(65535+1));
+
+        //if it is < 4 bytes add padded zeros 
+        if (id_field.length()==1){
+            System.out.println("Yes");
+            return "000"+id_field;
+        }
+        else if(id_field.length()==2){
+            System.out.println("No");
+            return "00"+id_field;
+        }
+        else if(id_field.length()==3){
+            System.out.println("~");
+            return "0"+id_field;
+        }
+
+        return id_field;
+
+    }
+
     private static String encodeFunc(String client, String server, String payL){
         
 
@@ -142,7 +167,8 @@ public class PacketSender extends Thread{
         String tOS = "00"; //type of service (fixed)
         String flags ="4000"; //corresponds to the fragment offset of IP header fields (fixed)
         String ttl ="4006"; //40 corresponds to the TTL field, 06 corresponds to TCP, protocol field (fixed)
-        String idField = "1c46" ; //identification field (fixed)
+        // String idField = "1c46" ; //identification field (fixed)
+        String idField = setIdField() ; //identification field (fixed)
 
  
         String clientIP = convertIPToHex(client); //source IP address in the IP header in hex
