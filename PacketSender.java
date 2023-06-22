@@ -198,20 +198,26 @@ public class PacketSender extends Thread{
             String input = br.readLine();
             if (input.toLowerCase().equals("y")){
                 System.out.println("------------------------------------");
-                System.out.println("Enter a Server IP:   ");
+                // System.out.println("Enter a Client/Source IP:   ");
+                // ipSrs = br.readLine();
+                System.out.println("\nEnter a Server/Destination IP:   ");
                 ipDest = br.readLine();
-                System.out.println("Enter Payload:   ");
+                System.out.println("\nEnter Payload:   ");
                 payL = br.readLine();
                 System.out.println("------------------------------------");
                 
 
             }
-            System.out.println("__________Thank You!____________");
-            System.out.println("");
+            System.out.println("__________Thank You!____________\n");
            
         }
 
-        
+
+        System.out.println("------------ Provided data ------------");
+        System.out.println("Source IP: "+ ipSrs);
+        System.out.println("Destination IP: "+ ipDest);
+        System.out.println("Payload: "+ payL);
+        System.out.println("------------------------\n");
 
         String data = encodeFunc(ipSrs, ipDest, payL);
 

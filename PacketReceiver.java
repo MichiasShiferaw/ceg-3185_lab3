@@ -27,7 +27,7 @@ public class PacketReceiver extends Thread {
             s = ss.accept();
 
             // Outputs once client socket is accepted
-            System.out.println("***__Client Connected __***");
+            System.out.println("\n***__Client Connected __***\n");
 
             //Read from client using input stream
             in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
@@ -36,9 +36,7 @@ public class PacketReceiver extends Thread {
 
             data = removePad(data);
 
-            System.out.println("Datagram : "+ data);
-
-            System.out.println("__________________");
+            System.out.println("Datagram : "+ data+"\n");
 
             decodeFunc(data);
 
