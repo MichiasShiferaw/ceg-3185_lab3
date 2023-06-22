@@ -2,10 +2,9 @@ import java.net.*;
 
 import java.io.*;
 
-
     /**
      * @class CEG 3185 Lab 3
-     * @author Michias Shiferaw
+     * @author Michias Shiferaw and Teodora Vukojevic
      * @since June 22 2023
      * @version 2.1
      * @param args
@@ -14,29 +13,32 @@ import java.io.*;
 public class PacketReceiver extends Thread {
 
 
-    private ServerSocket ss = null;
-    private Socket s = null;
-    private DataInputStream in =null;
+    private static ServerSocket myService;
+    private static Socket serviceSocket;
+    private static DataInputStream input;
 
 
     public PacketReceiver(int port){
         try{
-            ss = new ServerSocket(port);
+            myService = new ServerSocket(port);
             System.out.println("Server is up and running");
 
-            s = ss.accept();
+            //Creating socket and waiting for client connection
+            serviceSocket = myService.accept();
 
-            // Outputs once client socket is accepted
+            //Establish socket connection to server
             System.out.println("\n***__Client Connected __***\n");
 
-            //Read from client using input stream
-            in = new DataInputStream(new BufferedInputStream(s.getInputStream()));
+            //Read from client socket to DataInputStream Object
+            input = new DataInputStream(new BufferedInputStream(serviceSocket.getInputStream()));
 
-            String data = in.readUTF();
+            //Reads the DataInputStream obj as a string that has been encoded using UTF-8 format
+            String data = input.readUTF();
 
+            //Remove the added padding zeros
             data = removePad(data);
 
-            System.out.println("Datagram : "+ data+"\n");
+            System.out.println("IP Datagram (packet) received : "+ data.toUpperCase()+"\n");
 
             decodeFunc(data);
 
@@ -172,6 +174,13 @@ public class PacketReceiver extends Thread {
 
     public static void main(String[] args) throws IOException {
         PacketReceiver receiver =new PacketReceiver(4999);
+        
+        
+        input.close();
+        serviceSocket.close();
+        myService.close();
+
+        
     }
     
 }
