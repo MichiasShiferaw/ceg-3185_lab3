@@ -121,7 +121,9 @@ public class PacketReceiver extends Thread {
         return sb.toString();
     }
 
-
+    /*
+     * Decodes the stream and prints it on the screen
+     */
     public static void decodeFunc(String input){
 
         String[] inputArr = input.split(" "); //example 4500 0028 1c46 4000 4006 9d35 c0a8 0003 c0a8 0001 434f 4c4f 4d42 4941 2032 202d 204d 4553 5349 2030
@@ -175,7 +177,7 @@ public class PacketReceiver extends Thread {
     public static void main(String[] args) throws IOException {
         PacketReceiver receiver =new PacketReceiver(4999);
         
-        
+        // Close sockets and input reader
         input.close();
         serviceSocket.close();
         myService.close();

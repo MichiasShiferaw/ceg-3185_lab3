@@ -16,7 +16,7 @@ public class PacketSender extends Thread{
     private static DataOutputStream output;
 
     /*
-     * Send out the IP datagram to the assigned address and port number
+     * Send out the IP datagram to the assigned address and port number through socket
      */
     public PacketSender(String address, int port, String data){
         try{
@@ -180,6 +180,9 @@ public class PacketSender extends Thread{
 
     }
 
+    /*
+     * Returns the data presented from user in an encoded stream to be sent through socket
+     */
     private static String encodeFunc(InetAddress ipClient, InetAddress ipServer, String payL){
         
 
