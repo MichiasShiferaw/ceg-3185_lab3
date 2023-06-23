@@ -4,6 +4,17 @@ This lab demonstrates the importance of IP protocol; with the use of Network Soc
 
 &nbsp;
 
+## Project Objectives
+
+- &check; Implement two programs, a client and a server and two func (methods), one to encode (at the client side), one to decode (at the server side)
+- The Client: [PacketSender.java](#class-description)
+    - &check; Reads the data from user 
+    - &check; Sends the encoded stream to the server through socket 
+- The Server: [PacketReceiver.java](#class-description)
+    - &check; Acknowledges the client that the encoded stream has been received
+    - &check; Decodes the stream and prints it on the screen
+
+
 ## Class Description
 
 | Class     |  Description                |
@@ -12,9 +23,7 @@ This lab demonstrates the importance of IP protocol; with the use of Network Soc
 | [`PacketReciever`](#server) | Waits for incoming client/sender requests by listening to a specified port (4999), once accepted, the server performs a decoding function involving the checksum function to determine if there are no errors. If no errors are found, the program unveils the datagram including the source IP and message/payload as well as their respective length in bytes. |
 
 
-
 &nbsp;
-
 
 
 ## Usage/Examples
@@ -68,6 +77,7 @@ java PacketSender
 
 to execute the client side
 
+&nbsp;
 
 ## Demo
 
@@ -89,11 +99,14 @@ to execute the client side
 └── README.md
 ```
 
+&nbsp;
 
 ## Authors
 
 - [@michiasshiferaw](https://www.github.com/michiasshiferaw)
 - [@teodoravuk22](https://github.com/teodoravuk22)
+
+&nbsp;
 
 ## References
 
