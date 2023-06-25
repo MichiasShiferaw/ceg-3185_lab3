@@ -32,7 +32,6 @@ This lab demonstrates the importance of IP protocol; with the use of Network Soc
 
 To run this project:
 
-&nbsp;
 
 Open up two seperate terminals
 
@@ -44,7 +43,7 @@ In one terminal run;
 ```bash
 javac PacketReceiver.java
 ```
-to read and compile class file.
+to read and compile the server class file.
 
 &nbsp;
 
@@ -60,12 +59,15 @@ In the other terminal run;
 ```bash
 javac PacketSender.java
 ```
-to read and compile class file.
+to read and compile the client class file.
 
 &nbsp;
 
 ```bash
-java PacketSender -server {DEST_IP} -payload {"custom_payload"}
+java PacketSender -server {DEST_IP} -payload "{custom_payload}"
+
+#  example
+java PacketSender -server 127.000.0.3 -payload "SPAIN 2 - RONALDO 5"
 ```
 
 OR 

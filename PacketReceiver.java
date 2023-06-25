@@ -70,6 +70,7 @@ public class PacketReceiver extends Thread {
         int fDecode = Integer.parseInt(flags,16);
         int tDecode= Integer.parseInt(tcp,16);
         int csumDecode =Integer.parseInt(csum,16);
+        
         int p1Decode = Integer.parseInt(p1,16);
         int p2Decode =Integer.parseInt(p2,16);
         int p3Decode = Integer.parseInt(p3, 16);

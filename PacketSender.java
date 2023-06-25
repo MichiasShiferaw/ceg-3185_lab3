@@ -191,7 +191,7 @@ public class PacketSender extends Thread{
         String flags ="4000"; //corresponds to the fragment offset of IP header fields (fixed)
         String ttl ="4006"; //40 corresponds to the TTL field, 06 corresponds to TCP, protocol field (fixed)
         String idField = setIdField() ; //identification field (variable)
-        idField = "1c46" ;
+        // idField = "1c46" ;
  
         String clientIP = convertIPToHex(ipClient); //source IP address in the IP header in hex
         String serverIP = convertIPToHex(ipServer); //destination IP address in the IP header in hex
